@@ -11,11 +11,11 @@ import (
 
 type CustomerServiceContract interface {
 	GetAll() []dto.Customer
-	GetByID(id uint) dto.Customer
+	GetByID(uint) dto.Customer
 
 	Create(entity.Customer) (dto.Customer, error)
 	Update(entity.Customer) (dto.Customer, error)
-	Delete(id uint) error
+	Delete(uint) error
 }
 
 type CustomerService struct {

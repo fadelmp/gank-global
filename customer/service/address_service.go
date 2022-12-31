@@ -11,13 +11,13 @@ import (
 
 type AddressServiceContract interface {
 	GetAll() []dto.Address
-	GetByID(id uint) dto.Address
-	GetByCustomerID(customer_id uint) dto.Address
+	GetByID(uint) dto.Address
+	GetByCustomerID(uint) dto.Address
 
 	Create(entity.Address) (dto.Address, error)
 	Update(entity.Address) (dto.Address, error)
-	Delete(id uint) error
-	DeleteByCustomerID(customer_id uint) error
+	Delete(uint) error
+	DeleteByCustomerID(uint) error
 }
 
 type AddressService struct {

@@ -8,13 +8,13 @@ import (
 
 type AddressRepositoryContract interface {
 	GetAll() []entity.Address
-	GetByID(id uint) entity.Address
-	GetByCustomerID(customer_id uint) []entity.Address
+	GetByID(uint) entity.Address
+	GetByCustomerID(uint) []entity.Address
 
 	Create(entity.Address) (entity.Address, error)
 	Update(entity.Address) (entity.Address, error)
-	Delete(id uint) error
-	DeleteByCustomerID(customer_id uint) error
+	Delete(uint) error
+	DeleteByCustomerID(uint) error
 }
 
 type AddressRepository struct {
