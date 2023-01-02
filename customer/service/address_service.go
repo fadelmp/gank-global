@@ -108,7 +108,7 @@ func (a *AddressService) CheckID(id uint) bool {
 
 	address_data := a.AddressRepository.GetByID(id)
 
-	if address_data.ID == 0 && address_data.IsActive {
+	if address_data.ID == 0 || !address_data.IsActive {
 		return false
 	}
 
@@ -119,7 +119,7 @@ func (a *AddressService) CheckCustomerID(customer_id uint) bool {
 
 	customer_data := a.CustomerRepository.GetByID(customer_id)
 
-	if customer_data.ID == 0 && !customer_data.IsActive {
+	if customer_data.ID == 0 || !customer_data.IsActive {
 		return false
 	}
 

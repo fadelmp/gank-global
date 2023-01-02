@@ -109,7 +109,7 @@ func (c *CustomerService) CheckID(id uint) bool {
 
 	customer_data := c.CustomerRepository.GetByID(id)
 
-	if customer_data.ID == 0 {
+	if customer_data.ID == 0 || !customer_data.IsActive {
 		return false
 	}
 
@@ -123,8 +123,7 @@ func (c *CustomerService) PutAddress(id uint, dto []dto.Address) error {
 		value.CustomerID = id
 		address := mapper.ToAddressEntity(value)
 
-		_, err := c.AddressRepository.Create(address)
-		if err != nil {
+		if _, err := c.AddressRepository.Create(address); err != nil {
 			return err
 		}
 	}
