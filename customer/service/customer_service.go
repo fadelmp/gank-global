@@ -98,7 +98,7 @@ func (c *CustomerService) CheckPhone(dto dto.Customer) bool {
 
 	customer_data := c.CustomerRepository.GetByPhone(phone_number)
 
-	if customer_data.ID != 0 {
+	if customer_data.ID != 0 && customer_data.IsActive {
 		return false
 	}
 
