@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  order:
+    image: order
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 8030:8030
