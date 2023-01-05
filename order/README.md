@@ -14,3 +14,7 @@ DB_NAME =
 SERVICE_PORT = :8030
 CUSTOMER_SERVICE_URI = # set this url to where is customer service api run
 PRODUCT_SERVICE_URI = # set this url to where is product service api run
+
+
+Run with command 
+$ go run main.go
