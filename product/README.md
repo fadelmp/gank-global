@@ -10,9 +10,7 @@ DB_PASSWORD =
 DB_HOST = 
 DB_PORT = 
 DB_NAME = 
-
 SERVICE_PORT = :8020
-
 
 Run with command 
 $ go run main.go
