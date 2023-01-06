@@ -69,6 +69,10 @@ func (o *OrderService) Create(dto dto.Order) error {
 
 	order_entity := mapper.ToOrderEntity(dto)
 
+	if !o.CheckStock(dto) {
+		return errors.New("Stock not enough")
+	}
+
 	order, err := o.OrderRepository.Create(order_entity)
 
 	if err != nil {
@@ -109,9 +113,13 @@ func (o *OrderService) PutItem(id uint, dto []dto.Item) error {
 	for _, value := range dto {
 
 		value.OrderID = id
-		address := mapper.ToItemEntity(value)
+		item := mapper.ToItemEntity(value)
 
-		if _, err := o.ItemRepository.Create(address); err != nil {
+		if _, err := o.ItemRepository.Create(item); err != nil {
+			return err
+		}
+
+		if err := o.UpdateStock(item); err != nil {
 			return err
 		}
 	}
@@ -124,4 +132,39 @@ func (o *OrderService) GenerateOrderNumber() string {
 	t := time.Now()
 	return strconv.FormatInt(t.UnixNano(), 10)
 
+}
+
+func (o *OrderService) CheckStock(dto dto.Order) bool {
+
+	item := dto.Item
+
+	for _, value := range item {
+
+		id := value.ID
+
+		product_data, err := o.ProductRequest.GetProductById(id)
+		if err != nil {
+			return false
+		}
+
+		if product_data.Stock < value.Quantity {
+			return false
+		}
+	}
+
+	return true
+}
+
+func (o *OrderService) UpdateStock(item entity.Item) error {
+
+	product_data, err := o.ProductRequest.GetProductById(item.ID)
+
+	if err != nil {
+		return err
+	}
+
+	product_data.Stock = product_data.Stock - item.Quantity
+
+	_, err = o.ProductRequest.UpdateProduct(product_data)
+	return err
 }
