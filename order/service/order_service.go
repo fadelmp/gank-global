@@ -16,8 +16,8 @@ type OrderServiceContract interface {
 	GetAll() ([]dto.Order, error)
 	GetByID(id uint) (dto.Order, error)
 
-	Create(entity.Order) (dto.Order, error)
-	Update(entity.Order) (dto.Order, error)
+	Create(entity.Order) error
+	Update(entity.Order) error
 }
 
 type OrderService struct {
@@ -63,7 +63,7 @@ func (o *OrderService) GetByID(id uint) (dto.Order, error) {
 	return mapper.ToOrderDto(order, customer, products), err
 }
 
-func (o *OrderService) Create(dto dto.Order) (dto.Order, error) {
+func (o *OrderService) Create(dto dto.Order) error {
 
 	dto.Number = o.GenerateOrderNumber()
 
@@ -72,33 +72,25 @@ func (o *OrderService) Create(dto dto.Order) (dto.Order, error) {
 	order, err := o.OrderRepository.Create(order_entity)
 
 	if err != nil {
-		return dto, err
+		return err
 	}
 
 	err = o.PutItem(order.ID, dto.Item)
 
-	customer, err := o.CustomerRequest.GetCustomerById(order.CustomerID)
-
-	products, err := o.ProductRequest.GetAllProduct()
-
-	return mapper.ToOrderDto(order, customer, products), err
+	return err
 }
 
-func (o *OrderService) Update(dto dto.Order) (dto.Order, error) {
+func (o *OrderService) Update(dto dto.Order) error {
 
 	if !o.CheckID(dto.ID) {
-		return dto, errors.New(config.OrderNotFound)
+		return errors.New(config.OrderNotFound)
 	}
 
 	Order_entity := mapper.ToOrderEntity(dto)
 
-	order, err := o.OrderRepository.Update(Order_entity)
+	_, err := o.OrderRepository.Update(Order_entity)
 
-	customer, err := o.CustomerRequest.GetCustomerById(order.CustomerID)
-
-	products, err := o.ProductRequest.GetAllProduct()
-
-	return mapper.ToOrderDto(order, customer, products), err
+	return err
 }
 
 func (o *OrderService) CheckID(id uint) bool {

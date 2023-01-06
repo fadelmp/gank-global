@@ -60,11 +60,28 @@ func (o *OrderController) Create(e echo.Context) error {
 		return config.ErrorResponse(e, http.StatusInternalServerError, config.BadRequest)
 	}
 
-	res, err := o.OrderService.Create(order)
+	err := o.OrderService.Create(order)
 
 	if err != nil {
 		return config.ErrorResponse(e, http.StatusInternalServerError, err.Error())
 	}
 
-	return config.SuccessResponse(e, http.StatusOK, res)
+	return config.SuccessResponse(e, http.StatusOK, "Order Success")
+}
+
+func (o *OrderController) Update(e echo.Context) error {
+
+	var order dto.Order
+
+	if e.Bind(&order) != nil {
+		return config.ErrorResponse(e, http.StatusInternalServerError, config.BadRequest)
+	}
+
+	err := o.OrderService.Update(order)
+
+	if err != nil {
+		return config.ErrorResponse(e, http.StatusInternalServerError, err.Error())
+	}
+
+	return config.SuccessResponse(e, http.StatusOK, "Update Order Success")
 }
